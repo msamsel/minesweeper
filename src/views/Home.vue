@@ -1,18 +1,20 @@
 <template>
-	<div class="home">
-		<img alt="Vue logo" src="../assets/logo.png">
-		<HelloWorld msg="Welcome to Your Vue.js App"/>
+	<div>
+		<Minesweeper
+			:size="{ width: 10, height: 8 }"
+			:bombNumber="10"
+		/>
 	</div>
 </template>
 
 <script>
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import Minesweeper from '@/components/game/Minesweeper.vue';
 
 export default {
 	name: 'home',
 	components: {
-		HelloWorld
+		Minesweeper
 	}
 }
 </script>
