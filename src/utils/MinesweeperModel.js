@@ -9,16 +9,8 @@ export default class MinesweeperModel {
 		this._init = false;
 	}
 
-	showPosition( x, y ) {
-		if ( !this._init ) {
-			this.init( { x, y } );
-		}
-
-		this.board[ x ][ y ].show();
-	}
-
 	init( x, y ) {
-		const bombs = getBombsPositions( {
+		const bombs = generateBombsPositions( {
 			width: this.width,
 			height: this.height,
 			blockedX: x,
@@ -43,6 +35,68 @@ export default class MinesweeperModel {
 		this._init = true;
 	}
 
+	finish() {
+		console.log( 'the end' );
+	}
+
+	showPosition( x, y ) {
+		if ( x < 0 ||
+			x > this.width - 1 ||
+			y < 0 ||
+			y > this.height -1
+		) {
+			return;
+		}
+
+		if ( this.board[ x ][ y ].isShown() ) {
+			return;
+		}
+
+		if ( !this._init ) {
+			this.init( { x, y } );
+		}
+
+		const showResult = this.board[ x ][ y ].show();
+
+		if ( showResult < 0 ) {
+			this.finish();
+		} else if ( showResult === 0 ) {
+			this.showNeighbours( x, y );
+		}
+	}
+
+	showNeighbours( x, y ) {
+		this.showPosition( x-1, y );
+		this.showPosition( x-1, y-1 );
+		this.showPosition( x, y-1 );
+		this.showPosition( x+1, y-1 );
+		this.showPosition( x+1, y );
+		this.showPosition( x+1, y+1 );
+		this.showPosition( x, y+1 );
+		this.showPosition( x-1, y+1 );
+	}
+
+	getView() {
+		const view = [];
+
+		for ( let x = 0; x < this.board.length; x++ ) {
+			view[ x ] = [];
+			for ( let y = 0; y < this.board[ x ].length; y++ ) {
+				if ( !this.board[ x ][ y ].isShown() ) {
+					view[ x ][ y ] = '';
+					continue;
+				} else if ( this.board[ x ][ y ].isBomb() ) {
+					view[ x ][ y ] = 'booom';
+					continue;
+				} else {
+					view[ x ][ y ] = this.board[ x ][ y ].value;
+				}
+			}
+		}
+
+		return view;
+	}
+
 	_getNumberOfBombNeighbours( x, y ) {
 		const horizontal = [ x-1, x, x+1 ],
 			vertical = [ y-1, y, y+1 ];
@@ -56,9 +110,9 @@ export default class MinesweeperModel {
 				}
 
 				if ( positionX < 0 ||
-					positionX >= this.width ||
+					positionX > this.width - 1 ||
 					positionY < 0 ||
-					positionY >= this.height
+					positionY > this.height - 1
 				) {
 					continue;
 				}
@@ -73,7 +127,7 @@ export default class MinesweeperModel {
 	}
 }
 
-function getBombsPositions( { width, height, blockedX, blockedY, bombsNumber } ) {
+function generateBombsPositions( { width, height, blockedX, blockedY, bombsNumber } ) {
 	const numbers = [],
 		blockedNumber = blockedX + width * blockedY;
 
@@ -125,7 +179,11 @@ class Tile {
 
 	show() {
 		this.hidden = false;
-		// return boom or value
+		return this.isBomb() ? -1 : this.value;
+	}
+
+	isShown() {
+		return !this.hidden;
 	}
 
 	isBomb() {
