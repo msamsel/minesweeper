@@ -58,6 +58,7 @@ export default {
 			border: 1px solid black;
 			box-sizing: border-box;
 			vertical-align: top;
+			cursor: pointer;
 			p {
 				margin: 0;
 				padding: 0;
