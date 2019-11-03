@@ -15,10 +15,6 @@ export default {
 	name: 'Board',
 	props: [ 'board' ],
 	computed: {
-		numberOfTiles() {
-			return this.board.length * this.board[ 0 ].length;
-		},
-
 		width() {
 			return this.board[ 0 ].length;
 		},
