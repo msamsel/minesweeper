@@ -140,6 +140,10 @@ export default class MinesweeperModel {
 		return this.board[ x ][ y ].isShown();
 	}
 
+	isFlagged( x, y ) {
+		return this.board[ x ][ y ].isFlagged();
+	}
+
 	_getNumberOfSafeTiles() {
 		let result = 0;
 

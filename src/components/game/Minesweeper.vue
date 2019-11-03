@@ -38,6 +38,10 @@ export default {
 				this.isStarted = true;
 			}
 
+			if ( minesweeper.isFlagged( x, y ) ) {
+				return;
+			}
+
 			minesweeper.showPosition( x, y );
 			this.board = minesweeper.getView();
 
