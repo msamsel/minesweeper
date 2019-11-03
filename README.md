@@ -1,6 +1,8 @@
 # minesweeper
 Minesweeper game.
 
+[Demo](https://msamsel.github.io/minesweeper/dist/)
+
 ## Project setup
 ```
 yarn install
