@@ -1,7 +1,7 @@
 <template>
 	<div class="minesweeper">
 		<BoardHeader @restart="restartHandler" :startTime="startTime" :isFinished="isFinished" :result="result"/>
-		<Board :board="board" @tile="tileHandler" />
+		<Board :board="board" @tile="tileHandler" @flag="flagHandler" />
 	</div>
 </template>
 
@@ -56,6 +56,15 @@ export default {
 			this.isFinished = false;
 			this.startTime = 0;
 			this.result = '';
+		},
+
+		flagHandler( y, x ) {
+			if ( minesweeper.isShown( x, y ) ) {
+				return;
+			}
+
+			minesweeper.toggleFlag( x, y );
+			this.board = minesweeper.getView();
 		}
 	}
 };

@@ -74,6 +74,10 @@ export default class MinesweeperModel {
 			return;
 		}
 
+		if ( this.board[ x ][ y ].isFlagged() ) {
+			return;
+		}
+
 		if ( !this._init ) {
 			this.init( x, y );
 		}
@@ -103,6 +107,10 @@ export default class MinesweeperModel {
 		this.showPosition( x-1, y+1 );
 	}
 
+	toggleFlag( x, y ) {
+		this.board[ x ][ y ].toggleFlag()
+	}
+
 	getView() {
 		// Need to rotate array for proper rendering;
 		const view = [];
@@ -110,7 +118,10 @@ export default class MinesweeperModel {
 		for ( let y = 0; y < this.board[ 0 ].length; y++ ) {
 			view[ y ] = [];
 			for ( let x = 0; x < this.board.length; x++ ) {
-				if ( !this.board[ x ][ y ].isShown() ) {
+				if ( this.board[ x ][ y ].isFlagged() ) {
+					view[ y ][ x ] = '🚩';
+					continue;
+				} else if ( !this.board[ x ][ y ].isShown() ) {
 					view[ y ][ x ] = '';
 					continue;
 				} else if ( this.board[ x ][ y ].isBomb() ) {
@@ -123,6 +134,10 @@ export default class MinesweeperModel {
 		}
 
 		return view;
+	}
+
+	isShown( x, y ) {
+		return this.board[ x ][ y ].isShown();
 	}
 
 	_getNumberOfSafeTiles() {
@@ -228,6 +243,10 @@ class Tile {
 		return this.isBomb() ? -1 : this.value;
 	}
 
+	toggleFlag() {
+		this.flagged = !this.flagged;
+	}
+
 	isShown() {
 		return !this.hidden;
 	}
@@ -236,4 +255,7 @@ class Tile {
 		return this.type === 'bomb';
 	}
 
+	isFlagged() {
+		return this.flagged;
+	}
 }

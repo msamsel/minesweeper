@@ -3,6 +3,7 @@
 		<div v-for="(row, rowIndex ) in this.board" class="minesweeper-board__row" :key="rowIndex + '' ">
 			<div v-for="( tile, tileIndex ) in row" class="minesweeper-board__tile" :key="rowIndex + '-' + tileIndex"
 				@click="$emit( 'tile', rowIndex, tileIndex )"
+				@click.right.prevent="handleRightClick( rowIndex, tileIndex )"
 				:class="classes( rowIndex, tileIndex )"
 			>
 				<p>{{tile}}</p>
@@ -18,9 +19,14 @@ export default {
 	methods: {
 		classes( rowIndex, columnIndex ) {
 			return {
-				shown: this.board[ rowIndex ][ columnIndex ] !== '',
-				bomb: this.board[ rowIndex ][ columnIndex ] === '💣'
+				hidden: this.board[ rowIndex ][ columnIndex ] === '',
+				bomb: this.board[ rowIndex ][ columnIndex ] === '💣',
+				flag: this.board[ rowIndex ][ columnIndex ] === '🚩'
 			};
+		},
+
+		handleRightClick( rowIndex, tileIndex ) {
+			this.$emit( 'flag', rowIndex, tileIndex );
 		}
 	},
 	computed: {
@@ -64,18 +70,23 @@ export default {
 			box-sizing: border-box;
 			vertical-align: top;
 			cursor: pointer;
+			background-color: rgb(200, 200, 200);
 			p {
 				margin: 0;
 				padding: 0;
 			}
 		}
 
-		.shown {
-			background-color: rgb(200, 200, 200);
+		.hidden {
+			background-color: unset;
 			cursor: default;
 		}
 
-		.bomb.shown {
+		.flag {
+			background-color: unset;
+		}
+
+		.bomb {
 			background-color: rgb(255, 64, 64);
 		}
 	}
