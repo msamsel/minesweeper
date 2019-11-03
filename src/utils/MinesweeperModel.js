@@ -45,6 +45,18 @@ export default class MinesweeperModel {
 		return this._finish;
 	}
 
+	getResult() {
+		if ( !this.isFinished() ) {
+			return 'in progress';
+		}
+
+		if ( this.isVictory ) {
+			return 'victory';
+		}
+
+		return 'loose';
+	}
+
 	showPosition( x, y ) {
 		if ( this.isFinished() ) {
 			return;
@@ -72,6 +84,11 @@ export default class MinesweeperModel {
 			this.finish();
 		} else if ( showResult === 0 ) {
 			this.showNeighbours( x, y );
+		}
+
+		if ( this._getNumberOfSafeTiles() === 0 ) {
+			this.isVictory = true;
+			this.finish();
 		}
 	}
 
@@ -106,6 +123,24 @@ export default class MinesweeperModel {
 		}
 
 		return view;
+	}
+
+	_getNumberOfSafeTiles() {
+		let result = 0;
+
+		for ( let x = 0; x < this.board.length; x++ ) {
+			for ( let y = 0; y < this.board[ 0 ].length; y++ ) {
+				const currentTile = this.board[ x ][ y ];
+
+				if ( currentTile.isShown() || currentTile.isBomb() ) {
+					continue;
+				}
+
+				result++;
+			}
+		}
+
+		return result;
 	}
 
 	_getNumberOfBombNeighbours( x, y ) {

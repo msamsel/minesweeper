@@ -1,7 +1,9 @@
 <template>
 	<div class="board-header">
 		<button @click="$emit( 'restart' )" >Restart</button>
-		<Timer :startTime="startTime" :isFinished="isFinished" />
+		<Timer v-if="result === ''" :startTime="startTime" :isFinished="isFinished" />
+		<p v-else-if="result === 'victory'" >Congratulation you won!!!</p>
+		<p v-else>You loose :(</p>
 	</div>
 </template>
 
@@ -13,7 +15,7 @@ export default {
 	components: {
 		Timer
 	},
-	props: [ 'startTime', 'isFinished' ]
+	props: [ 'startTime', 'isFinished', 'result' ]
 };
 </script>
 

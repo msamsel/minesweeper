@@ -1,6 +1,6 @@
 <template>
 	<div class="minesweeper">
-		<BoardHeader @restart="restartHandler" :startTime="startTime" :isFinished="isFinished" />
+		<BoardHeader @restart="restartHandler" :startTime="startTime" :isFinished="isFinished" :result="result"/>
 		<Board :board="board" @tile="tileHandler" />
 	</div>
 </template>
@@ -27,7 +27,8 @@ export default {
 			board: minesweeper.getView(),
 			isStarted: false,
 			isFinished: false,
-			startTime: 0
+			startTime: 0,
+			result: ''
 		}
 	},
 	methods: {
@@ -43,6 +44,7 @@ export default {
 			if ( minesweeper.isFinished() ) {
 				this.isStarted = false;
 				this.isFinished = true;
+				this.result = minesweeper.getResult();
 			}
 		},
 
@@ -53,6 +55,7 @@ export default {
 			this.isStarted = false;
 			this.isFinished = false;
 			this.startTime = 0;
+			this.result = '';
 		}
 	}
 };
