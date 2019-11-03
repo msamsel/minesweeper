@@ -1,8 +1,10 @@
 <template>
 	<div class="minesweeper-board" :style="cssVars" >
-		<div v-for="(row, rowIndex ) in this.board" class="minesweeper-board__row" :key="rowIndex">
-			<div v-for="( tile, tileIndex ) in row" class="minesweeper-board__tile" :key="rowIndex*height+tileIndex">
-				{{ tile }}
+		<div v-for="(row, rowIndex ) in this.board" class="minesweeper-board__row" :key="rowIndex + '' ">
+			<div v-for="( tile, tileIndex ) in row" class="minesweeper-board__tile" :key="rowIndex + '-' + tileIndex"
+				@click="$emit( 'tile', rowIndex, tileIndex ) "
+			>
+				<p>{{tile}}</p>
 			</div>
 		</div>
 	</div>
@@ -26,11 +28,11 @@ export default {
 		},
 
 		cssVars() {
+			const cellSize = 30;
 			return {
-				'--board-width': `${ this.width * 20 }px`,
-				'--board-height': `${ this.height * 20 }px`,
 				'--board-columns': this.width,
-				'--board-rows': this.height
+				'--board-rows': this.height,
+				'--cell-size': `${ cellSize }px`
 			};
 		}
 	}
@@ -40,21 +42,26 @@ export default {
 <style scoped lang="scss">
 	.minesweeper-board {
 		margin: 0 auto;
-		width: var( --board-width );
-		height: var( --board-height );
+		width: calc( var( --cell-size ) * var( --board-columns ) );
+		height: calc( var( --cell-size ) * var( --board-rows ) );
 		border: 1px solid black;
 
 		&__row {
 			margin: 0;
-			height: 20px;
+			height: var( --cell-size )
 		}
 
 		&__tile {
 			display: inline-block;
-			width: 20px;
-			height: 20px;
+			width: var( --cell-size );
+			height: var( --cell-size );
 			border: 1px solid black;
 			box-sizing: border-box;
+			vertical-align: top;
+			p {
+				margin: 0;
+				padding: 0;
+			}
 		}
 	}
 </style>

@@ -1,7 +1,7 @@
 <template>
 	<div class="minesweeper">
 		<BoardHeader />
-		<Board :board="board" />
+		<Board :board="board" @tile="tileHandler" />
 	</div>
 </template>
 
@@ -27,7 +27,15 @@ export default {
 		return {
 			board: minesweeper.getView()
 		}
+	},
+	methods: {
+		tileHandler( y, x ) {
+			minesweeper.showPosition( x, y );
+
+			this.board = minesweeper.getView();
+		}
 	}
+
 };
 </script>
 
