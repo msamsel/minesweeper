@@ -1,8 +1,5 @@
 <template>
-	<div>
-		<p v-if="startTime === 0 && !isFinished">Waiting for game to start</p>
-		<p v-else-if="startTime > 0" >Time: {{ time }}</p>
-	</div>
+	<span>{{ time }}</span>
 </template>
 
 <script>
@@ -33,12 +30,8 @@ export default {
 		}
 	},
 
-	watch: {
-		startTime( val ) {
-			if ( val > 0 ) {
-				this.updateCurrentTime();
-			}
-		}
+	mounted() {
+		this.updateCurrentTime();
 	}
 }
 
