@@ -2,7 +2,7 @@
 	<div>
 		<Minesweeper
 			:size="{ width: 10, height: 8 }"
-			:bombNumber="10"
+			:bombsNumber="10"
 		/>
 	</div>
 </template>

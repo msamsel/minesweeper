@@ -1,41 +1,60 @@
 <template>
 	<div class="minesweeper-board" :style="cssVars" >
-		<BoardTile v-for="i in numberOfTiles" :key="i" />
+		<div v-for="(row, rowIndex ) in this.board" class="minesweeper-board__row" :key="rowIndex">
+			<div v-for="( tile, tileIndex ) in row" class="minesweeper-board__tile" :key="rowIndex*height+tileIndex">
+				{{ tile }}
+			</div>
+		</div>
 	</div>
 </template>
 
 <script>
-import BoardTile from '@/components/game/BoardTile.vue';
-
 export default {
 	name: 'Board',
-	props: [ 'size', 'board' ],
-	components: {
-		BoardTile
-	},
+	props: [ 'board' ],
 	computed: {
 		numberOfTiles() {
-			return this.size.width * this.size.height;
+			return this.board.length * this.board[ 0 ].length;
 		},
+
+		width() {
+			return this.board[ 0 ].length;
+		},
+
+		height() {
+			return this.board.length;
+		},
+
 		cssVars() {
 			return {
-				'--board-width': `${ this.size.width * 20 }px`,
-				'--board-height': `${ this.size.height * 20 }px`,
-				'--board-columns': this.size.width,
-				'--board-rows': this.size.height
+				'--board-width': `${ this.width * 20 }px`,
+				'--board-height': `${ this.height * 20 }px`,
+				'--board-columns': this.width,
+				'--board-rows': this.height
 			};
 		}
 	}
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 	.minesweeper-board {
 		margin: 0 auto;
-		display: grid;
 		width: var( --board-width );
 		height: var( --board-height );
-		grid-template-columns: repeat( var( --board-columns ), 1fr );
-		grid-template-rows: repeat( var( --board-rows ), 1fr )
+		border: 1px solid black;
+
+		&__row {
+			margin: 0;
+			height: 20px;
+		}
+
+		&__tile {
+			display: inline-block;
+			width: 20px;
+			height: 20px;
+			border: 1px solid black;
+			box-sizing: border-box;
+		}
 	}
 </style>

@@ -77,19 +77,34 @@ export default class MinesweeperModel {
 	}
 
 	getView() {
+		// Need to rotate array for proper rendering;
 		const view = [];
 
-		for ( let x = 0; x < this.board.length; x++ ) {
-			view[ x ] = [];
-			for ( let y = 0; y < this.board[ x ].length; y++ ) {
+		// for ( let x = 0; x < this.board.length; x++ ) {
+		// 	view[ x ] = [];
+		// 	for ( let y = 0; y < this.board[ x ].length; y++ ) {
+		// 		if ( !this.board[ x ][ y ].isShown() ) {
+		// 			view[ x ][ y ] = '';
+		// 			continue;
+		// 		} else if ( this.board[ x ][ y ].isBomb() ) {
+		// 			view[ x ][ y ] = 'booom';
+		// 			continue;
+		// 		} else {
+		// 			view[ x ][ y ] = this.board[ x ][ y ].value;
+		// 		}
+		// 	}
+		// }
+		for ( let y = 0; y < this.board[ 0 ].length; y++ ) {
+			view[ y ] = [];
+			for ( let x = 0; x < this.board.length; x++ ) {
 				if ( !this.board[ x ][ y ].isShown() ) {
-					view[ x ][ y ] = '';
+					view[ y ][ x ] = '';
 					continue;
 				} else if ( this.board[ x ][ y ].isBomb() ) {
-					view[ x ][ y ] = 'booom';
+					view[ y ][ x ] = 'boom';
 					continue;
 				} else {
-					view[ x ][ y ] = this.board[ x ][ y ].value;
+					view[ y ][ x ] = this.board[ x ][ y ].value;
 				}
 			}
 		}

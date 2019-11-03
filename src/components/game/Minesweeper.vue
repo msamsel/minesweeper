@@ -1,7 +1,7 @@
 <template>
 	<div class="minesweeper">
 		<BoardHeader />
-		<Board :size="size" />
+		<Board :board="board" />
 	</div>
 </template>
 
@@ -10,17 +10,23 @@ import BoardHeader from '@/components/game/BoardHeader.vue';
 import Board from '@/components/game/Board.vue';
 import MinesweeperModel from '@/utils/MinesweeperModel';
 
-window.ms = new MinesweeperModel();
+const minesweeper = new MinesweeperModel();
+window.ms = minesweeper;
 
 export default {
 	name: 'Minesweeper',
 	props: [
 		'size',
-		'bombNumber'
+		'bombsNumber'
 	],
 	components: {
 		BoardHeader,
 		Board
+	},
+	data() {
+		return {
+			board: minesweeper.getView()
+		}
 	}
 };
 </script>
