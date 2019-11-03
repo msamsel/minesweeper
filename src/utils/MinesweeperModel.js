@@ -7,6 +7,7 @@ export default class MinesweeperModel {
 		this.board = addEmptyBoard( this.width, this.height );
 
 		this._init = false;
+		this._finish = false;
 	}
 
 	init( x, y ) {
@@ -36,10 +37,19 @@ export default class MinesweeperModel {
 	}
 
 	finish() {
+		this._finish = true;
 		console.log( 'the end' );
 	}
 
+	isFinished() {
+		return this._finish;
+	}
+
 	showPosition( x, y ) {
+		if ( this.isFinished() ) {
+			return;
+		}
+
 		if ( x < 0 ||
 			x > this.width - 1 ||
 			y < 0 ||

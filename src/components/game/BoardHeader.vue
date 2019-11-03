@@ -1,11 +1,20 @@
 <template>
-	<p>Here will be info about remaining bombs and time.</p>
+	<div class="board-header">
+		<button @click="$emit( 'restart' )" >Restart</button>
+		<Timer :startTime="startTime" :isFinished="isFinished" />
+	</div>
 </template>
 
 <script>
+import Timer from '@/components/game/Timer.vue';
+
 export default {
-	name: 'BoardHeader'
-}
+	name: 'BoardHeader',
+	components: {
+		Timer
+	},
+	props: [ 'startTime', 'isFinished' ]
+};
 </script>
 
 <style>
