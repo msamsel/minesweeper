@@ -38,7 +38,6 @@ export default class MinesweeperModel {
 
 	finish() {
 		this._finish = true;
-		console.log( 'the end' );
 	}
 
 	isFinished() {
