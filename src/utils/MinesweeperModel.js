@@ -53,7 +53,7 @@ export default class MinesweeperModel {
 		}
 
 		if ( !this._init ) {
-			this.init( { x, y } );
+			this.init( x, y );
 		}
 
 		const showResult = this.board[ x ][ y ].show();
@@ -101,7 +101,7 @@ export default class MinesweeperModel {
 					view[ y ][ x ] = '';
 					continue;
 				} else if ( this.board[ x ][ y ].isBomb() ) {
-					view[ y ][ x ] = 'boom';
+					view[ y ][ x ] = '💣';
 					continue;
 				} else {
 					view[ y ][ x ] = this.board[ x ][ y ].value;
