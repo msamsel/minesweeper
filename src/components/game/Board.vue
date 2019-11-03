@@ -2,7 +2,8 @@
 	<div class="minesweeper-board" :style="cssVars" >
 		<div v-for="(row, rowIndex ) in this.board" class="minesweeper-board__row" :key="rowIndex + '' ">
 			<div v-for="( tile, tileIndex ) in row" class="minesweeper-board__tile" :key="rowIndex + '-' + tileIndex"
-				@click="$emit( 'tile', rowIndex, tileIndex ) "
+				@click="$emit( 'tile', rowIndex, tileIndex )"
+				:class="classes( rowIndex, tileIndex )"
 			>
 				<p>{{tile}}</p>
 			</div>
@@ -14,6 +15,14 @@
 export default {
 	name: 'Board',
 	props: [ 'board' ],
+	methods: {
+		classes( rowIndex, columnIndex ) {
+			return {
+				shown: this.board[ rowIndex ][ columnIndex ] !== '',
+				bomb: this.board[ rowIndex ][ columnIndex ] === '💣'
+			};
+		}
+	},
 	computed: {
 		width() {
 			return this.board[ 0 ].length;
@@ -59,6 +68,15 @@ export default {
 				margin: 0;
 				padding: 0;
 			}
+		}
+
+		.shown {
+			background-color: rgb(200, 200, 200);
+			cursor: default;
+		}
+
+		.bomb.shown {
+			background-color: rgb(255, 64, 64);
 		}
 	}
 </style>
