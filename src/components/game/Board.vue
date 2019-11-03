@@ -69,7 +69,6 @@ export default {
 			border: 1px solid black;
 			box-sizing: border-box;
 			vertical-align: top;
-			cursor: pointer;
 			background-color: rgb(200, 200, 200);
 			p {
 				margin: 0;
@@ -79,7 +78,7 @@ export default {
 
 		.hidden {
 			background-color: unset;
-			cursor: default;
+			cursor: pointer;
 		}
 
 		.flag {
