@@ -1,4 +1,4 @@
-import Tile from './Tile.js';
+import Tile from './Tile';
 
 export function generateBombsPositions( { width, height, blockedX, blockedY, bombsNumber } ) {
 	const numbers = [],
@@ -23,7 +23,7 @@ export function generateBombsPositions( { width, height, blockedX, blockedY, bom
 	} );
 }
 
-export function addEmptyBoard( width, height ) {
+export function generateEmptyBoard( width, height ) {
 	const ret = [];
 
 	for ( let i = 0; i < width; i++ ) {

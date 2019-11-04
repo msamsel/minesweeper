@@ -1,11 +1,12 @@
-import { generateBombsPositions, addEmptyBoard } from './tools.js';
+import { generateBombsPositions } from './tools';
+import Board from './Board';
 export default class MinesweeperModel {
 	constructor( { width = 10, height = 8, bombsNumber = 10 } = {} ) {
 		this.width = width;
 		this.height = height;
 		this.bombsNumber = bombsNumber;
 
-		this.board = addEmptyBoard( this.width, this.height );
+		this.board = new Board( width, height )
 
 		this._init = false;
 		this._finish = false;
@@ -21,16 +22,19 @@ export default class MinesweeperModel {
 		} );
 
 		for ( const bomb of bombs ) {
-			this.board[ bomb.x ][ bomb.y ].setType( 'bomb' );
+			this.board.setBomb( bomb.x, bomb.y );
 		}
 
 		for ( let j = 0; j < this.height; j++ ) {
 			for ( let i = 0; i < this.width; i++ ) {
-				if ( this.board[ i ][ j ].isBomb() ) {
+				if ( this.board.isBomb( i, j ) ) {
 					continue;
 				}
-				this.board[ i ][ j ].setType( 'safe' );
-				this.board[ i ][ j ].value = this._getNumberOfBombNeighbours( i, j );
+
+				this.board.setSafe( i, j );
+
+				const neighbourBombs = this._getNumberOfBombNeighbours( i, j );
+				this.board.setTileValue( i, j, neighbourBombs );
 			}
 		}
 
@@ -70,11 +74,11 @@ export default class MinesweeperModel {
 			return;
 		}
 
-		if ( this.board[ x ][ y ].isShown() ) {
+		if ( this.board.isShown( x, y ) ) {
 			return;
 		}
 
-		if ( this.board[ x ][ y ].isFlagged() ) {
+		if ( this.board.isFlagged( x, y ) ) {
 			return;
 		}
 
@@ -82,7 +86,7 @@ export default class MinesweeperModel {
 			this.init( x, y );
 		}
 
-		const showResult = this.board[ x ][ y ].show();
+		const showResult = this.board.show( x, y );
 
 		if ( showResult < 0 ) {
 			this.finish();
@@ -108,27 +112,27 @@ export default class MinesweeperModel {
 	}
 
 	toggleFlag( x, y ) {
-		this.board[ x ][ y ].toggleFlag()
+		this.board.toggleFlag( x, y );
 	}
 
 	getView() {
 		// Need to rotate array for proper rendering;
 		const view = [];
 
-		for ( let y = 0; y < this.board[ 0 ].length; y++ ) {
+		for ( let y = 0; y < this.board.heightLength; y++ ) {
 			view[ y ] = [];
-			for ( let x = 0; x < this.board.length; x++ ) {
-				if ( this.board[ x ][ y ].isFlagged() ) {
+			for ( let x = 0; x < this.board.widthLength; x++ ) {
+				if ( this.board.isFlagged( x, y ) ) {
 					view[ y ][ x ] = '🚩';
 					continue;
-				} else if ( !this.board[ x ][ y ].isShown() ) {
+				} else if ( !this.board.isShown( x, y ) ) {
 					view[ y ][ x ] = '';
 					continue;
-				} else if ( this.board[ x ][ y ].isBomb() ) {
+				} else if ( this.board.isBomb( x, y ) ) {
 					view[ y ][ x ] = '💣';
 					continue;
 				} else {
-					view[ y ][ x ] = this.board[ x ][ y ].value;
+					view[ y ][ x ] = this.board.getTileValue( x, y );
 				}
 			}
 		}
@@ -137,21 +141,19 @@ export default class MinesweeperModel {
 	}
 
 	isShown( x, y ) {
-		return this.board[ x ][ y ].isShown();
+		return this.board.isShown( x, y );
 	}
 
 	isFlagged( x, y ) {
-		return this.board[ x ][ y ].isFlagged();
+		return this.board.isFlagged( x, y );
 	}
 
 	_getNumberOfSafeTiles() {
 		let result = 0;
 
-		for ( let x = 0; x < this.board.length; x++ ) {
-			for ( let y = 0; y < this.board[ 0 ].length; y++ ) {
-				const currentTile = this.board[ x ][ y ];
-
-				if ( currentTile.isShown() || currentTile.isBomb() ) {
+		for ( let x = 0; x < this.board.widthLength; x++ ) {
+			for ( let y = 0; y < this.board.heightLength; y++ ) {
+				if ( this.board.isShown( x, y ) || this.board.isBomb( x, y ) ) {
 					continue;
 				}
 
@@ -182,7 +184,7 @@ export default class MinesweeperModel {
 					continue;
 				}
 
-				if ( this.board[ positionX ][ positionY ].isBomb() ) {
+				if ( this.board.isBomb( positionX, positionY ) ) {
 					result++;
 				}
 			}
